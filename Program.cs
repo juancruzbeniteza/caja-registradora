@@ -1,5 +1,9 @@
 ﻿const string NOMBRE_COMERCIO = "KIOSCO EL RECREO";
 
+const decimal DESCUENTO_ALTO = 0.10m;
+const decimal DESCUENTO_MEDIO = 0.05m;
+const decimal DESCUENTO_NULO = 0.00m;
+
 Console.WriteLine($"=== {NOMBRE_COMERCIO} ===");
 Console.Write("Nombre del cajero: ");
 string cajero = Console.ReadLine();
@@ -34,9 +38,28 @@ do
                 $"Producto cargado: {producto} - Precio: ${precio:F2} | Total acumulado: ${{totalVenta:F2}}\\n");
             break;
         case "2":
-            Console.WriteLine("\\n--- Resumen de la Venta ---");
+            decimal porcentajeAplicado;
+            if (totalVenta > 50000m)
+            {
+                porcentajeAplicado = DESCUENTO_ALTO;
+            }
+            else if (totalVenta > 20000m)
+            {
+                porcentajeAplicado = DESCUENTO_MEDIO;
+            }
+            else
+            {
+                porcentajeAplicado = DESCUENTO_NULO;
+            }
+            
+            decimal montoDescuento = totalVenta * porcentajeAplicado;
+            decimal totalFinal = totalVenta - montoDescuento;
+            
+            Console.WriteLine("\n--- Resumen de la Venta ---");
             Console.WriteLine($"Cantidad de productos: {cantidadProductos}");
-            Console.WriteLine($"Total a pagar: {totalVenta:F2}");
+            Console.WriteLine($"Subtotal: ${totalVenta:F2}");
+            Console.WriteLine($"Descuento aplicado ({porcentajeAplicado * 100}%): -${montoDescuento:F2}");
+            Console.WriteLine($"Total final a pagar: ${totalFinal:F2}");
             break;
         default:
             Console.WriteLine("Opcion no valida. Ingrese 1 o 2");
