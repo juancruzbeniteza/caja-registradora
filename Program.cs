@@ -27,10 +27,10 @@ do
     switch (opcion)
     {
         case "1":
-            Console.WriteLine("Ingrese el nombre del producto:");
+            Console.WriteLine("Ingresar el nombre del producto:");
             string producto = Console.ReadLine();
 
-            Console.WriteLine("Ingrese el precio del prducto:");
+            Console.WriteLine("Ingresar el precio del prducto:");
             decimal precio = decimal.Parse(Console.ReadLine());
             
             totalVenta += precio;
@@ -53,12 +53,12 @@ do
             }
             
             decimal porcentajeDescuentoMonto = totalVenta * porcentajeAplicado;
-            decimal totalconDescuentoMonto = totalVenta - porcentajeDescuentoMonto;
+            decimal subtotalconDescuentoMonto = totalVenta - porcentajeDescuentoMonto;
 
             string opcionPago = "";
             bool pagoValido = false;
-            decimal ajustePago = 0m;
-            string detalleAjustePago = "Sin cambios";
+            decimal descuentoPago = 0m;
+            decimal recargoPago = 0m;
 
             while (!pagoValido)
             {
@@ -71,18 +71,14 @@ do
                 switch (opcionPago)
                 {
                     case "1":
-                        ajustePago = -(totalconDescuentoMonto * DESCUENTO_EFECTIVO);
-                        detalleAjustePago = $"Deswuento efectivo ({DESCUENTO_EFECTIVO * 100:0}%): -${Math.Abs(ajustePago):F2}";
+                        descuentoPago = subtotalconDescuentoMonto * DESCUENTO_EFECTIVO;
                         pagoValido = true;
                         break;
                     case "2":
-                        ajustePago = 0m;
-                        detalleAjustePago = "Debito: $0.00";
                         pagoValido = true;
                         break;
                     case "3":
-                        ajustePago = totalconDescuentoMonto * RECARGO_CREDITO;
-                        detalleAjustePago = $"Recargo crédito ({RECARGO_CREDITO * 100:0}%): +${ajustePago:F2}";
+                        recargoPago = subtotalconDescuentoMonto * RECARGO_CREDITO;
                         pagoValido = true;
                         break;
                     default:
@@ -90,18 +86,33 @@ do
                         break;
                 }
             }
-            decimal totalFinal = totalconDescuentoMonto + ajustePago;
-            
-            Console.WriteLine("\n--- Resumen de la Venta ---");
-            Console.WriteLine($"Cantidad de productos: {cantidadProductos}");
-            Console.WriteLine($"Subtotal: ${totalVenta:F2}");
-            Console.WriteLine($"Descuento por total ({porcentajeAplicado * 100:0}%): -${porcentajeDescuentoMonto:F2}");
-            Console.WriteLine($"Total intermedio: ${totalconDescuentoMonto:F2}");
-            Console.WriteLine($"Ajuste por medio de pago: {detalleAjustePago}");
-            Console.WriteLine($"Total final a pagar: ${totalFinal:F2}");
+
+            decimal descuentoTotal = porcentajeDescuentoMonto + descuentoPago;
+            decimal totalFinal = totalVenta - descuentoTotal + recargoPago;
+
+            void ImprimirSeparador()
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    Console.Write("-");
+                }
+                Console.WriteLine(); 
+            }
+            Console.WriteLine();
+            ImprimirSeparador();
+            Console.WriteLine($"       {NOMBRE_COMERCIO}");
+            ImprimirSeparador();
+            Console.WriteLine($"Cajero: {cajero}");
+            Console.WriteLine($"Productos: {cantidadProductos}");
+            Console.WriteLine($"Subtotal: {totalVenta:F2}");
+            Console.WriteLine($"Descuento: {descuentoTotal:F2}");
+            Console.WriteLine($"Recargo: {recargoPago:F2}");
+            ImprimirSeparador();
+            Console.WriteLine($"TOTAL: {totalFinal:F2}");
+            ImprimirSeparador();
             break;
         default:
-            Console.WriteLine("Opcion no valida. Ingrese 1 o 2");
+            Console.WriteLine("Opcion invalida. Ingrese otra");
             break;
     }
     
