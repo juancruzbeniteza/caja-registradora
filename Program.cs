@@ -115,7 +115,6 @@ do
             Console.WriteLine("Opcion invalida. Ingrese otra");
             break;
     }
-    
 }while (opcion != "2");
 
 
